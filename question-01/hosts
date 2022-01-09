@@ -1,0 +1,2 @@
+[production]
+server-01 ansible_host=183.182.125.147 ansible_python_interpreter=/usr/bin/python3 ansible_ssh_user=root

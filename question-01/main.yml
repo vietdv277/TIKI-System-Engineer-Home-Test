@@ -1,0 +1,11 @@
+- hosts: production
+  gather_facts: True
+  become: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - { role: essentials, tags: ["ess"] }
+    - { role: docker, tags: ["docker"] }
+    - { role: tuning, tags: ["tuning"] }

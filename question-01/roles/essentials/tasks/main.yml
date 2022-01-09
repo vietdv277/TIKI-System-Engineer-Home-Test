@@ -1,0 +1,58 @@
+- name: Essentials - Create admin users
+  user:
+    name: "{{item[1].user}}"
+    comment: "{{item[1].fullname}}"
+    shell: "{{ users_default_shell }}"
+    createhome: "{{ users_create_homedirs }}"
+    state: present
+  with_nested:
+    - "{{ users }}"
+    - "{{ users_info }}"
+  when: item[0] == item[1].user
+
+- name: Essentials - SSH keys
+  # authorized_key: user="{{ item[0] }}" key="{{item[1].authorized_keys}}"
+  authorized_key:
+    user: "{{ item[0] }}"
+    key: "{{item[1].authorized_keys}}"
+  with_nested:
+    - "{{ users }}"
+    - "{{ users_info }}"
+  when: item[0] == item[1].user
+
+- name: Essentials - Create user's sudoers file
+  lineinfile:
+    dest: /etc/sudoers.d/{{item[1].user}}
+    regexp: "^{{item[1].user}}"
+    line: "{{item[1].user}} ALL=(ALL) NOPASSWD:ALL"
+    state: present
+    create: yes
+    owner: root
+    group: root
+    mode: 0440
+    validate: "visudo -cf %s"
+  with_nested:
+    - "{{ users }}"
+    - "{{ users_info }}"
+  when: item[0] == item[1].user
+
+- name: Essentials - Set hostname
+  hostname:
+    name: "{{ fqdn }}"
+
+- name: Essentials - Add correct IP address to hosts file
+  lineinfile:
+    dest: /etc/hosts
+    insertafter: '^127\.0\.0\.1\slocalhost'
+    line: "{{ ansible_default_ipv4.address }} {{ fqdn }} {{ hostname }}"
+    state: present
+
+- name: Essentials - Remove default line from hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^127\.0\.1\.1'
+    state: absent
+
+- name: Essentials - Set the current timezone
+  timezone:
+    name: "{{ timezone }}"

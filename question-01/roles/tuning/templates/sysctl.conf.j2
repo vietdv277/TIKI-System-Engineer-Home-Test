@@ -1,0 +1,13 @@
+# Set the maximum OS receive buffer size for all types of connections
+net.core.rmem_max={{ max_expected_path_BDP }}
+
+# Set the maximum OS send buffer size for all types of connections
+net.core.wmem_max={{ max_expected_path_BDP }}
+
+# Set the TCP receive memory buffer (tcp_rmem) settings
+net.ipv4.tcp_rmem=4096 {{ default_receive_buffer_size }} {{ max_expected_path_BDP }}
+
+# Set the TCP send memory buffer (tcp_wmem) settings
+net.ipv4.tcp_wmem=4096 {{ default_buffer_space_allowed_TCP_socket }} {{ max_expected_path_BDP }}
+
+net.ipv4.route.flush=1

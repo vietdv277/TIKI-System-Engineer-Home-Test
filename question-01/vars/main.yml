@@ -1,0 +1,54 @@
+# 1 - Variables for Essentials role.
+## SSH user variables.
+users_create_homedirs: yes
+users_default_shell: /bin/bash
+
+users:
+  - vietdv
+  - sysadmin01
+
+users_info:
+  - user: vietdv
+    fullname: "Viet Dinh Van"
+    authorized_keys: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaw2/4a/DWOqMwcPdg5mHXBG0zkgtm2uFT6+mz9xD2SRwbC0TMPrn+eCOK9qy/VQhDX21fdJK1QoNvJ6V/TrKXXbtRFdDsyZR0WOITwZiMoPqs+/lxVgNDNUPFuwFpN9jfr/wph67lPJ35/AgjGlGyquWIV+VWRhqNIYkeogBY7nqfVSCMDCEdI4ol12PxPvBiAixaAid0MYbxMLpIxdY3ItvFnF+9SZWsdxRK7osIdVZph8DFzNUJZrIx+rzpW/IoKDFwrdYYF20R9KVXE7jdyo86x/AI31nxohsamKZCB7/VtZg7O6chjtYJqKfAkc/0KFCG8p5xLjS1MKlkU/OL1XMFHD0C2BjcZ+tNpbdSROjE83vzj7okFIeh2eE25U6wplX3FIr1RJZe5h+izZy5k1wG5qV79E33kXOp4ACNTZV8C4RWs5488O3ZoObMd7dz7LcK619QvyiUERfeBzozIG3E6eCYLV9TrN0m42HZlYb4zWl9Fd5LQnjavRmLXYEqj8BnBamVt2H1FntsyGOM2NT1XnMDVEELxfr9yuFVRZONLQykh65UvBW0LImbbqNTKaQl0NL15JhWCY1Seo+EOn9aOFyp/faYenW+MYD/JLBBzbGBxztwSMm+2IjP5vd2QWdRk00be1ReEXu0H+yhigND1G0n1hilQsTTE2D3xQ==
+  - user: sysadmin01
+    fullname: "System Admin 01"
+    authorized_keys: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaw2/4a/DWOqMwcPdg5mHXBG0zkgtm2uFT6+mz9xD2SRwbC0TMPrn+eCOK9qy/VQhDX21fdJK1QoNvJ6V/TrKXXbtRFdDsyZR0WOITwZiMoPqs+/lxVgNDNUPFuwFpN9jfr/wph67lPJ35/AgjGlGyquWIV+VWRhqNIYkeogBY7nqfVSCMDCEdI4ol12PxPvBiAixaAid0MYbxMLpIxdY3ItvFnF+9SZWsdxRK7osIdVZph8DFzNUJZrIx+rzpW/IoKDFwrdYYF20R9KVXE7jdyo86x/AI31nxohsamKZCB7/VtZg7O6chjtYJqKfAkc/0KFCG8p5xLjS1MKlkU/OL1XMFHD0C2BjcZ+tNpbdSROjE83vzj7okFIeh2eE25U6wplX3FIr1RJZe5h+izZy5k1wG5qV79E33kXOp4ACNTZV8C4RWs5488O3ZoObMd7dz7LcK619QvyiUERfeBzozIG3E6eCYLV9TrN0m42HZlYb4zWl9Fd5LQnjavRmLXYEqj8BnBamVt2H1FntsyGOM2NT1XnMDVEELxfr9yuFVRZONLQykh65UvBW0LImbbqNTKaQl0NL15JhWCY1Seo+EOn9aOFyp/faYenW+MYD/JLBBzbGBxztwSMm+2IjP5vd2QWdRk00be1ReEXu0H+yhigND1G0n1hilQsTTE2D3xQ==
+
+## Server hostname variables.
+fqdn: server-01.tiki.com
+hostname: server-01
+
+## Timezone.
+timezone: Asia/Ho_Chi_Minh
+
+# 2 - Variables for Docker role.
+## Edition can be one of: 'ce' (Community Edition) or 'ee' (Enterprise Edition).
+docker_edition: "ce"
+docker_package: "docker-{{ docker_edition }}"
+docker_package_state: present
+
+## Service options.
+docker_service_state: started
+docker_service_enabled: true
+docker_restart_handler_state: restarted
+
+## Docker repo URL.
+docker_repo_url: https://download.docker.com/linux
+
+## Switch 'stable' to 'nightly' if needed.
+docker_apt_release_channel: stable
+docker_apt_arch: amd64
+docker_apt_repository: "deb [arch={{ docker_apt_arch }}] {{ docker_repo_url }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+docker_apt_ignore_key_error: true
+docker_apt_gpg_key: "{{ docker_repo_url }}/{{ ansible_distribution | lower }}/gpg"
+
+# Docker daemon options as a dict
+docker_daemon_options:
+  log-driver: "local"
+  storage-driver: "overlay2"
+
+# 3 - Variables for Tuning role
+max_expected_path_BDP: 8388608
+default_receive_buffer_size: 87380
+default_buffer_space_allowed_TCP_socket: 16384
